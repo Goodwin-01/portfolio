@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Currency Value History</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    h2 { margin-bottom: 10px; }
+    label { display: inline-block; width: 150px; }
+    .error { color: red; font-size: 12px; margin-left: 10px; }
+    .row { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Currency Value History</h2>
+
+  <div class="row">
+    <label>Base Currency:</label>
+    <select id="fromCurrency">
+      <option value="">Select a Currency</option>
+      <option value="USD">US Dollar</option>
+      <option value="EUR">Euro</option>
+      <option value="GBP">Great Britain Pound</option>
+      <option value="JPY">Japanese Yen</option>
+      <option value="AUD">Australian Dollar</option>
+    </select>
+    <span id="fromError" class="error"></span>
+  </div>
+
+  <div class="row">
+    <label>Convert to Currency:</label>
+    <select id="toCurrency">
+      <option value="">Select a Currency</option>
+      <option value="USD">US Dollar</option>
+      <option value="EUR">Euro</option>
+      <option value="GBP">Great Britain Pound</option>
+      <option value="JPY">Japanese Yen</option>
+      <option value="AUD">Australian Dollar</option>
+    </select>
+    <span id="toError" class="error"></span>
+  </div>
+
+  <div class="row">
+    <label>From Date:</label>
+    <input type="date" id="fromDate">
+    <span id="fromDateError" class="error"></span>
+  </div>
+
+  <div class="row">
+    <label>To Date:</label>
+    <input type="date" id="toDate">
+    <span id="toDateError" class="error"></span>
+  </div>
+
+  <div class="row">
+    <button type="button" onclick="getData()">Show Results</button>
+    <button type="button" onclick="clearForm()">Clear</button>
+  </div>
+
+  <div>
+    <canvas id="chartjs-0" width="600" height="400"></canvas>
+  </div>
+
+  <script>
+  const apiKey = "VIgcWwc36RCpjH6bME9EdQdOEppXqfHy"; 
+  let chart;
+
+  function getData() {
+   
+    document.getElementById("fromError").innerHTML = "";
+    document.getElementById("toError").innerHTML = "";
+    document.getElementById("fromDateError").innerHTML = "";
+    document.getElementById("toDateError").innerHTML = "";
+
+    let fromCurrency = document.getElementById("fromCurrency").value;
+    let toCurrency = document.getElementById("toCurrency").value;
+    let fromDate = document.getElementById("fromDate").value;
+    let toDate = document.getElementById("toDate").value;
+    let valid = true;
+
+    if (fromCurrency === "") { document.getElementById("fromError").innerHTML = "Base Currency is Required"; valid = false; }
+    if (toCurrency === "") { document.getElementById("toError").innerHTML = "Convert To Currency is Required"; valid = false; }
+    if (fromDate === "") { document.getElementById("fromDateError").innerHTML = "From Date is Required"; valid = false; }
+    if (toDate === "") { document.getElementById("toDateError").innerHTML = "To Date is Required"; valid = false; }
+    if (!valid) return;
+
+   
+    let url = `https://api.polygon.io/v2/aggs/ticker/C:${fromCurrency}${toCurrency}/range/1/day/${fromDate}/${toDate}?adjusted=true&sort=asc&apiKey=${apiKey}`;
+
+    console.log("Fetching:", url); //
+
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        console.log("API response:", data);
+
+        if (!data.results || data.results.length === 0) {
+          alert("No data available for this date range.");
+          return;
+        }
+
+        let dates = data.results.map(d => new Date(d.t).toISOString().split("T")[0]);
+        let values = data.results.map(d => d.c);
+
+        if (chart) { chart.destroy(); } 
+
+        let ctx = document.getElementById("chartjs-0").getContext("2d");
+        chart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: dates,
+            datasets: [{
+              label: fromCurrency + " to " + toCurrency,
+              data: values,
+              borderColor: "teal",
+              fill: false
+            }]
+          },
+          options: {
+            responsive: false,
+            maintainAspectRatio: true
+          }
+        });
+      })
+      .catch(err => {
+        alert("Error fetching data. Check console.");
+        console.log(err);
+      });
+  }
+
+  function clearForm() {
+    document.getElementById("fromCurrency").value = "";
+    document.getElementById("toCurrency").value = "";
+    document.getElementById("fromDate").value = "";
+    document.getElementById("toDate").value = "";
+    document.getElementById("fromError").innerHTML = "";
+    document.getElementById("toError").innerHTML = "";
+    document.getElementById("fromDateError").innerHTML = "";
+    document.getElementById("toDateError").innerHTML = "";
+    if (chart) { chart.destroy(); }
+  }
+</script>
