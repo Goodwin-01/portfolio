@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UV Index Tracker</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 40px;
+      color: #1a1a1a;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .input-section {
+      margin-top: 20px;
+    }
+
+    input {
+      padding: 10px;
+      width: 260px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #0078d7;
+      color: white;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    .chart-box {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>UV Index Exposure Tracker Tool</h1>
+
+  <div class="input-section">
+    <input type="text" id="cityInput" placeholder="Enter city or ZIP (e.g. Ohio or 43210)" />
+    <button onclick="getUVData()">Get UV Data</button>
+  </div>
+
+  <div class="chart-box">
+    <canvas id="uvChart"></canvas>
+  </div>
+
+  <footer>
+    Made with ☀️ using Open-Meteo API and Chart.js
+  </footer>
+
+  <script>
+    const ctx = document.getElementById('uvChart').getContext('2d');
+    let chart;
+
+    window.onload = () => {
+      // Load Ohio UV Index by default
+      document.getElementById('cityInput').value = 'Ohio';
+      getUVData();
+    };
+
+    async function getUVData() {
+      const city = document.getElementById('cityInput').value.trim();
+      if (!city) {
+        alert('Please enter a city or ZIP code.');
+        return;
+      }
+
+      try {
+        // Get coordinates for city name
+        const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`);
+        const geoData = await geoRes.json();
+
+        if (!geoData.results || geoData.results.length === 0) {
+          alert('City not found. Try again.');
+          return;
+        }
+
+        const { latitude, longitude, name } = geoData.results[0];
+
+        // Get UV index forecast data
+        const uvRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=uv_index_max&timezone=auto`);
+        const uvData = await uvRes.json();
+
+        const dates = uvData.daily.time;
+        const uvValues = uvData.daily.uv_index_max;
+
+        if (chart) chart.destroy();
+
+        chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: dates,
+            datasets: [{
+              label: `Daily UV Index for ${name}`,
+              data: uvValues,
+              borderColor: 'rgba(0, 120, 215, 1)',
+              backgroundColor: 'rgba(0, 120, 215, 0.2)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.3,
+              pointRadius: 4,
+              pointBackgroundColor: '#0078d7'
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'UV Index',
+                  color: '#333'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Date',
+                  color: '#333'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: true,
+                labels: {
+                  color: '#333'
+                }
+              }
+            }
+          }
+        });
+      } catch (error) {
+        console.error(error);
+        alert('Error fetching UV data.');
+      }
+    }
+  </script>
+</body>
+</html>
