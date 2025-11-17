@@ -1,91 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="utf-8">
+  <meta name="author" content="Tavon Goodwin">
+  <meta name="keywords" content="HTML, CSS, Web Development, UALR, Review">
+  <meta name="description" content="HTML/CSS Review Assignment by Tavon Goodwin">
+  <title>HTML/CSS Review — Tavon Goodwin</title>
 
-    <!-- Required Meta Tags -->
-    <meta name="author" content="Tavon Goodwin">
-    <meta name="keywords" content="HTML, CSS, Review Assignment, UALR">
-    <meta name="description" content="HTML/CSS review assignment webpage recreation for UALR.">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
-    <title>HTML/CSS Review – Tavon Goodwin</title>
+  <style>
+    /* Standalone CSS so the file works immediately in the preview */
+    :root{
+      --navy:#043052;
+      --teal:#007b8f;
+      --teal-bright:#00b7c0;
+      --light-grey:#e7e9ea;
+      --white:#ffffff;
+    }
+    html,body{height:100%;margin:0;padding:0;font-family:Segoe UI,system-ui,Arial,Helvetica,sans-serif;color:#222;background:var(--white);}
+    /* page background (SVG used inline below for compatibility, but keep repeat-x behavior) */
+    body { background-image: linear-gradient(transparent, transparent); } /* fallback */
+    #wrapper{
+      width:800px;
+      margin:22px auto;
+      background:#fff;
+      border:2px solid var(--navy);
+      box-shadow:0 2px 6px rgba(0,0,0,0.08);
+    }
 
-    <!-- Link to the external stylesheet -->
-    <link rel="stylesheet" href="style/screen.css">
+    /* Header: using inline SVG so no external file needed */
+    header .header-svg{ display:block; width:100%; height:160px; }
+
+    nav{ background:var(--navy); border-top:4px solid var(--teal); }
+    .nav-list{ list-style:none; margin:0; padding:0; overflow:hidden; }
+    .nav-list li{ float:left; }
+    .nav-list li a{
+      display:block; padding:12px 18px; color:#fff; text-decoration:none; font-weight:600; font-size:14px;
+    }
+    .nav-list li a:hover, .nav-list li a:focus{
+      background:var(--light-grey); color:var(--navy);
+      outline: none;
+    }
+    nav::after{ content:""; display:block; clear:both; }
+
+    main{ padding:22px; }
+    .content-img{
+      float:right; width:220px; max-width:30%; border:3px solid var(--navy); margin:8px 0 8px 12px; background:#fff;
+    }
+
+    .alert{ background:var(--teal); color:#fff; padding:10px; margin:10px 0; border-radius:4px; }
+
+    h2{ color:var(--navy); margin-top:0; }
+    h3{ color:#01697a; }
+    h4{ color:#0099a4; }
+
+    pre{ background:#f4f6f7; border-left:4px solid var(--teal); padding:10px; overflow-x:auto; font-family:Consolas, Monaco, monospace; font-size:13px; }
+
+    footer{ clear:both; text-align:center; background:var(--navy); color:#fff; padding:12px; font-size:14px; border-top:3px solid var(--teal); }
+    footer a{ color:#bfeef3; text-decoration:none; }
+    footer a:hover{text-decoration:underline;}
+
+    /* small responsive tweak */
+    @media (max-width:840px){
+      #wrapper{ width:100%; margin:0; border-left:none; border-right:none; box-shadow:none;}
+      .content-img{ float:none; display:block; margin:12px auto;}
+    }
+  </style>
 </head>
-
 <body>
+  <a id="top"></a>
 
-    <div id="wrapper">
+  <div id="wrapper">
 
-        <!-- HEADER -->
-        <header>
-            <img src="images/header.jpg" alt="Webpage Header Image">
-        </header>
+    <!-- HEADER with an inline SVG placeholder (replace later with your image file if you want) -->
+    <header>
+      <svg class="header-svg" viewBox="0 0 800 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decorative header image">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1">
+            <stop offset="0" stop-color="#007b8f"/>
+            <stop offset="1" stop-color="#043052"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="160" fill="url(#g1)"></rect>
+        <text x="30" y="100" fill="#fff" font-family="Segoe UI, Arial" font-size="36">HTML/CSS Review — Tavon Goodwin</text>
+      </svg>
 
-        <!-- NAVIGATION -->
-        <nav>
-            <ul>
-                <li><a href="#" title="UALR Website">UALR</a></li>
-                <li><a href="#" title="Course Homepage">Course Homepage</a></li>
-                <li><a href="#" title="W3C Standards">W3C</a></li>
-                <li><a href="#" title="UALR Little Rock">Little Rock</a></li>
+      <!-- NAVIGATION -->
+      <nav aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><a href="https://ualr.edu/" title="University of Arkansas at Little Rock">UALR</a></li>
+          <li><a href="https://blackboard.ualr.edu/" title="Course Homepage">Course Homepage</a></li>
+          <li><a href="https://validator.w3.org/" title="W3C Validator">W3C</a></li>
+          <li><a href="https://www.littlerock.gov/" title="City of Little Rock">Little Rock</a></li>
+          <li><a href="https://www.youtube.com" title="My favorite site">YouTube</a></li>
+        </ul>
+      </nav>
+    </header>
 
-                <!-- Required: additional link to your favorite site -->
-                <li><a href="https://www.google.com" title="My Favorite Site">Favorite Site</a></li>
-            </ul>
-        </nav>
+    <!-- MAIN content -->
+    <main>
+      <section class="content">
+        <!-- content image placeholder (SVG) -->
+        <svg class="content-img" viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Content image placeholder">
+          <rect width="220" height="140" fill="#fff"/>
+          <rect x="6" y="6" width="208" height="128" fill="#f4f6f7" stroke="#043052" stroke-width="2"></rect>
+          <text x="110" y="74" fill="#043052" font-size="14" font-family="Segoe UI" text-anchor="middle">Content Image</text>
+        </svg>
 
-        <!-- CONTENT AREA -->
-        <main>
+        <h2>My Assessment</h2>
 
-            <h2>My Assessment</h2>
+        <p>
+          The most important goal of effective communication is clarity. Clarity is not the same as simplicity.
+          Often, simple things are clear if the message is intended to be brief and small, but often the message
+          is about a complex relationship that can only be presented with a necessarily large amount of data.
+        </p>
 
-            <p>
-                The most important goal of effective communication is clarity. Clarity is not the same as simplicity. Often, 
-                simple things are clear if the message is intended to be brief and small, but often the message is about a 
-                complex relationship that can only be presented with a necessarily large amount of data.
-            </p>
+        <p class="alert">
+          This complexity can be made to appear clear by effective organization and presentation and need not be
+          reduced to meaningless “bite-sized” chunks of data, as simplification usually does.
+        </p>
 
-            <!-- Second paragraph needs "alert" class -->
-            <p class="alert">
-                This complexity can be made to appear clear by effective organization and presentation and need not be reduced 
-                to meaningless bite-sized chunks of data, as simplification usually does.
-            </p>
+        <p>
+          Clarity refers to the focus on one particular message or goal at a time, rather than attempting to
+          accomplish too much at once. Simplicity is often responsible for the "dumbing" of information rather
+          than the illumination of it.
+        </p>
 
-            <!-- Floated Image -->
-            <img src="images/webpage_image.jpg" alt="Webpage Image" class="content-img">
+        <h2>Questions</h2>
 
-            <h3>Questions</h3>
+        <ol class="questions">
+          <li>
+            <strong>Explain the difference between the "alt" attribute and the "title" attribute.</strong>
+            <p><strong>Answer:</strong> The <code>alt</code> attribute supplies alternate text for images and accessibility. The <code>title</code> attribute provides optional hover tooltip text.</p>
+            <pre><code>&lt;img src="photo.jpg" alt="Portrait of a photographer"&gt;
+&lt;a href="photo.jpg" title="Open image"&gt;Open&lt;/a&gt;</code></pre>
+          </li>
 
-            <h4>1. Explain the difference between the "alt" attribute and the "title" attribute.</h4>
-            <p>
-                The <code>alt</code> attribute provides alternative text shown when an image cannot load, 
-                and it is used by screen readers.  
-                The <code>title</code> attribute shows a tooltip when the user hovers over an element.
-            </p>
+          <li>
+            <strong>Provide an example of how to mark up a definition from the dictionary.</strong>
+            <p><strong>Answer:</strong></p>
+            <pre><code>The &lt;dfn&gt;computer&lt;/dfn&gt; is an electronic device that performs logical operations.</code></pre>
+          </li>
 
-            <h4>2. Provide an example of how to mark up a definition from the dictionary.</h4>
-            <p>
-                Example:<br>
-                <code>&lt;dfn&gt;HTML&lt;/dfn&gt; stands for HyperText Markup Language.</code>
-            </p>
+          <li>
+            <strong>Provide an example of a link pointing to your favorite site.</strong>
+            <p><strong>Answer:</strong></p>
+            <pre><code>&lt;a href="https://www.youtube.com" title="Visit YouTube"&gt;YouTube&lt;/a&gt;</code></pre>
+          </li>
+        </ol>
+      </section>
+    </main>
 
-            <h4>3. Provide an example of a link pointing to your favorite site.</h4>
-            <p>
-                Example:<br>
-                <code>&lt;a href="https://www.google.com"&gt;Google&lt;/a&gt;</code>
-            </p>
-
-        </main>
-
-        <!-- FOOTER -->
-        <footer>
-            &copy; 2025 Tavon Goodwin • 
-            <a href="#top">Back to top</a>
-        </footer>
-
-    </div>
-
+    <!-- FOOTER -->
+    <footer>
+      <p>© 2025 Tavon Goodwin — <a href="#top">Back to Top</a></p>
+    </footer>
+  </div>
 </body>
 </html>
